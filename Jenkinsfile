@@ -24,7 +24,7 @@ pipeline {
         stage('Docker Run') {
             steps {
                 sh 'docker rm -f vle7-container || true'
-                sh 'docker run -d --name vle7-container -p 8080:8080 vle7-app:latest'
+                sh 'docker run -d --name vle7-container -p 8081:8080 vle7-app:latest'
             }
         }
 
