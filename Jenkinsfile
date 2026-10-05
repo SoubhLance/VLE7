@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -14,10 +15,23 @@ pipeline {
             }
         }
 
-        stage('Docker Test') {
+        stage('Docker Build') {
             steps {
-                sh 'docker --version'
+                sh 'docker build -t vle7-app:latest .'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                sh 'docker rm -f vle7-container || true'
+                sh 'docker run -d --name vle7-container -p 8080:8080 vle7-app:latest'
+            }
+        }
+
+        stage('Docker Verify') {
+            steps {
                 sh 'docker ps'
+                sh 'docker logs --tail 20 vle7-container'
             }
         }
     }
